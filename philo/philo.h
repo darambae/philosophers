@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:41:34 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/10 15:54:40 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/12 09:31:27 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <errno.h>
 
 # define EAT 0
 # define SLEEP 1
@@ -27,12 +28,26 @@
 
 typedef struct s_param
 {
-    int num_philo;
-    int time_to_die;
-    int time_to_eat;
-    int time_to_sleep;
-    int num_must_eat;
+	int	num_philo;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	num_must_eat;
+}			t_param;
 
-}           t_param;
+typedef struct s_philo
+{
+	int				id;
+	int				state;
+	int				last_meal;
+	int				num_eat;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*print;
+	t_param			*param;
+}					t_philo;
+
+int	is_digit(char **args);
+int	ft_atoi(char *str);
 
 #endif

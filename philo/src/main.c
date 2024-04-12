@@ -6,57 +6,63 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/10 16:25:02 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/12 09:37:07 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	set_param(t_param *param, char **args)
+static int	is_positive(char *str)
 {
-	param->num_philo = args[0];
-	param->time_to_die = args[1];
-	param->time_to_eat = args[2];
-	param->time_to_sleep = args[3];
-	if (args[4])
-		param->num_must_eat = args[4];
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_atoi(str[i]) < 0)
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-void	*eat(void *arg)
+static void	init_param(t_param *param, char **args)
 {
-	int		i;
-	int		time_stamp;
-
-	time_stamp = gettimeofday();
-	i = (int *)arg;
-	printf("%d : philo %d is eating\n", time_stamp, i);
+	if (is_digit(args) && is_positive(args))
+	{
+		param->num_philo = args[0];
+		param->time_to_die = args[1];
+		param->time_to_eat = args[2];
+		param->time_to_sleep = args[3];
+		if (args[4])
+			param->num_must_eat = args[4];
+	}
+	else
+		return (err_msg());
 }
 
 int	main(int ac, char **av)
 {
-	t_param			*param;
-    pthread_t		philo[param->num_philo];
-	pthread_mutex_t	forks[param->num_philo];
-	int				i;
-	int 			n;
+	t_param	*param;
+	t_philo	*philo;
+	int		i;
+	int		n;
 
-	param = malloc(sizeof(t_param));
 	if (ac == 5 || ac == 6)
 	{
-		set_param(param, av + 1);
-		i = 0;
-		n = 2 * i;
-		while (n < param->num_must_eat)
-		{
-			pthread_create(&philo[n], NULL, eat, &n);
-			i++;
-		}
-		i = 0;
-		while (n < param->num_must_eat)
-		{
-			pthread_join(philo[n], NULL);
-			i++;
-		}
+		/*Pseudo code*/
+		/*
+			param = malloc(sizeof(t_param));
+			if (!param)
+				err_msg("failed to malloc.\n");
+			philo = malloc(sizeof(t_philo) * param->num_philo);
+			if (!philo)
+				err_msg("failed to malloc.\n");
+			
+			init_param(param, av);
+			init_philo(philo);
+			
+		*/
 	}
 	else
 }
