@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dabae <dabae@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 13:48:17 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/16 17:04:36 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/17 15:50:34 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print(t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->param->print);
 }
 
-void	*take_forks(t_philo *philo)
+void	take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
@@ -28,11 +28,15 @@ void	*take_forks(t_philo *philo)
     ft_usleep(philo->param->time_to_eat);
 }
 
-void	*put_down_forks(t_philo *philo)
+void	put_down_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
     philo->num_eat++;
+    if (philo->num_eat == philo->param->num_must_eat)
+    {
+		philo->param->num_full++;
+    }
     philo->time_last_meal = get_time();
 }
 
