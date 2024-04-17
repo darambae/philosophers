@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/16 16:33:35 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/17 14:25:57 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	main(int ac, char **av)
 	{
 		init_param(param, av);
 		init_philo(philo, param);
+		life_cycle(philo, param);
 	}
 	else
 		err_msg("Insufficient or too many arguments\n");

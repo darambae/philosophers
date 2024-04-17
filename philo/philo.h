@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:41:34 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/16 16:34:31 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/17 14:30:59 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,24 @@
 # define THINK 2
 # define FORK 3
 # define DEAD 4
-# define STOP 5
+# define FULL 5
 
+struct s_philo;
 
 typedef struct s_param
 {
 	int				num_philo;
 	int				num_must_eat;
+	int				stop;
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
+	t_philo			*philo;
 	pthread_t		*tids;
 
 	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	dead;
-	pthread_mutex_t	stop;
+	pthread_mutex_t	lock;
 }				t_param;
 
 typedef struct s_philo
@@ -64,12 +66,13 @@ void		ft_usleep(uint64_t elapsed);
 void		err_msg(char *msg);
 uint64_t	get_time(void);
 
-
-void		*life_cycle(void *philo);
+int			init_param(t_param *param, char **args);
+int			init_philo(t_philo **philo, t_param *param);
+int			life_cycle(t_philo **philo, t_param *param);
 void		*take_forks(t_philo *philo);
 void		*put_down_forks(t_philo *philo);
 void		*eat(void *arg);
-int			*dead_stop(void *philo);
+void 		*dead_stop(void **philo);
 void		print(t_philo *philo, char *str);
 
 #endif

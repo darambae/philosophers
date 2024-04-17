@@ -6,11 +6,12 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/16 16:39:06 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/17 14:17:31 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
+#include "philo.h"
 
 /*Checking the arguements are all digits including sign*/
 static int	is_digit(char **args)
@@ -77,34 +78,41 @@ static int	is_positive(char *str)
 }
 
 /*Initializing the parameters*/
-static void	init_param(t_param *param, char **args)
+int	init_param(t_param *param, char **args)
 {
+	int	i;
+
+	i = -1;
 	if (is_digit(args) && is_positive(args))
 	{
+		pthread_mutex_init(&param->print, NULL);
+		pthread_mutex_init(&param->lock, NULL);
 		param->tids = malloc(sizeof(pthread_t) * param->num_philo);
 		if (!param->tids)
 			err_msg("failed to malloc.\n");
 		param->forks = malloc(sizeof(pthread_mutex_t) * param->num_philo);
 		if (!param->forks)
 			err_msg("failed to malloc.\n");
-		pthread_mutex_init(&param->print, NULL);
-		pthread_mutex_init(&param->dead, NULL);
-		param->num_philo = ft_atoi(args[0]);
-		param->time_to_die = ft_atoi(args[1]);
-		param->time_to_eat = ft_atoi(args[2]);
-		param->time_to_sleep = ft_atoi(args[3]);
+		while (++i < param->num_philo)
+			pthread_mutex_init(&param->forks[i], NULL);
+		param->stop	= 0;
+		param->num_philo = (int) ft_atoi(args[0]);
+		param->time_to_die = (uint64_t) ft_atoi(args[1]);
+		param->time_to_eat = (uint64_t) ft_atoi(args[2]);
+		param->time_to_sleep = (uint64_t) ft_atoi(args[3]);
 		if (args[4] && args[4] > 0)
-			param->num_must_eat = ft_atoi(args[4]);
+			param->num_must_eat = (int) ft_atoi(args[4]);
 		else
 			param->num_must_eat = -1;
+		return (0);
 	}
 	else
-		return (err_msg("Invalid arguments. Please double-check.\n"));
+		err_msg("Invalid arguments. Please double-check.\n");
+	return (0);
 }
 
 /*Initializing philosophers and starting the life cycle*/
-
-static void	init_philo(t_philo **philo, t_param *param)
+int	init_philo(t_philo **philo, t_param *param)
 {
 	int			i;
 
@@ -123,10 +131,14 @@ static void	init_philo(t_philo **philo, t_param *param)
 		philo[i]->num_eat = 0;
 		philo[i]->time_last_meal = 0;
 		philo[i]->thread = param->tids[i];
-		pthread_mutex_init(&(philo[i]->left_fork), NULL);
+		pthread_mutex_init(&(philo[i]->lock), NULL);
 		pthread_create(&(philo[i]->thread), NULL, life_cycle, philo[i]);
 	}
 	i = -1;
     while (++i < param->num_philo)
-        pthread_join(param->tids[i], NULL);
+    {
+		if (pthread_join(param->tids[i], NULL) != 0)
+			return (-1);
+	}
+	return (0);
 }

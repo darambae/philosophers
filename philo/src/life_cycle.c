@@ -6,42 +6,46 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/16 16:41:14 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/17 14:37:18 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	*dead_stop(void *philo)
+void *dead_stop(void *param)
 {
-	t_philo	*phi;
+	t_param	*data;
+	int		i;
 
-	phi = (t_philo *)philo;
-	if (phi->time_last_meal + phi->param->time_to_die < get_time())
+	i = -1;
+	data = (t_param *)param;
+	while (data->stop == 0)
 	{
-		pthread_mutex_lock(&phi->param->dead);
-		phi->state = DEAD;
-		print(phi, " died\n");
-		pthread_mutex_unlock(&phi->param->dead);
-		return (0);
+		while (++i < data->num_philo)
+		pthread_mutex_lock(&data->philo[i].lock);
+		pthread_mutex_lock(&data->lock);
+		if (data->philo[i].time_last_meal + data->time_to_die < get_time())
+		{
+			data->philo[i].state = DEAD;
+			data->stop = 1;
+			print(&data->philo[i], " died\n");
+		}
+		if (data->philo[i].num_eat == data->num_must_eat)
+		{
+			data->philo[i].state = FULL;
+		}
+		pthread_mutex_unlock(&data->philo[i].lock);
+		pthread_mutex_unlock(&data->lock);
 	}
-	if (phi->num_eat == phi->param->num_must_eat)
-	{
-		pthread_mutex_lock(&phi->param->stop);
-		phi->state = STOP;
-		print(phi, " everyone has eaten enough\n");
-		pthread_mutex_unlock(&phi->param->stop);
-		return (0);
-	}
-	return (1);
+	
 }
 
-void	*life_cycle(void *philo)
+int	life_cycle(t_philo **philo, t_param *param)
 {
-	pthread_t	*phi;
-	pthread_t	thread;
+	pthread_t thread;
 
-	phi = (t_philo *)philo;
-	while (dead_stop(phi) != 0)
-		pthread_create(&thread, NULL, eat, phi);
+	if (pthread_create(&thread, NULL, dead_stop, param) != 0)
+		return (1);
+	
+	
 }
