@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 13:48:17 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 13:03:28 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 13:21:38 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	print(t_philo *philo, char *str)
 /*By taking forks, start to eat*/
 void	take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(philo->left_fork);
 	print(philo, " has taken a fork\n");
 }
 
@@ -52,6 +52,6 @@ void	put_down_forks(t_philo *philo)
 	philo->time_last_meal = get_time();
 	ft_usleep(philo->param->time_to_eat);
 	pthread_mutex_unlock(&philo->lock);
-	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 }
