@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 08:57:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 11:15:43 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 12:55:14 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_usleep(uint64_t elapsed)
 
 	start = get_time();
 	while (get_time() < start + elapsed)
-		usleep(100);
+		usleep(elapsed / 10);
 }
 
 /*Checking the arguements are all digits including sign*/

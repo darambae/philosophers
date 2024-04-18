@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 10:40:37 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 12:46:19 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@ int	main(int ac, char **av)
 	if (ac == 5 || ac == 6)
 	{
 		init_param(param, av + 1);
-		//printf("here is problem at init_philo\n");
 		init_philo(param);
-		//printf("here is problem at life_cycle\n");
 		life_cycle(param);
 	}
 	else
+	{
+		free(param);
 		err_msg("Insufficient or too many arguments\n");
+	}
 }
