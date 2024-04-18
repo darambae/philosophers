@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 11:18:36 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 10:41:56 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	*anyone_dead(void *philo)
 		{
 			pthread_mutex_lock(&phi->param->lock);
 			change_state(phi, DEAD);
-			print(phi, " died\n");
+			print(phi, " died");
 			pthread_mutex_unlock(&phi->param->lock);
 		}
 	}

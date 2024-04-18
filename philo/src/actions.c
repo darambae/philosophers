@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 13:48:17 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 10:29:47 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 10:41:19 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	change_state(t_philo *philo, int state)
 void	print(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->param->print);
-	printf("%lu %d %s\n", get_time(), philo->id, str);
+	printf("At %lu, Philosopher no.%d %s.\n", get_time(), philo->id, str);
 	pthread_mutex_unlock(&philo->param->print);
 }
 
@@ -54,4 +54,3 @@ void	put_down_forks(t_philo *philo)
 	philo->time_last_meal = get_time();
 	pthread_mutex_unlock(&philo->lock);
 }
-
