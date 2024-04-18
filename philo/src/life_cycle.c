@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 10:41:56 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 13:02:53 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	eat_sleep_think(t_philo *philo)
 	take_forks(philo);
 	change_state(philo, EAT);
 	print(philo, " is eating");
-	ft_usleep(philo->param->time_to_eat);
 	put_down_forks(philo);
 	change_state(philo, SLEEP);
 	print(philo, " is sleeping");
