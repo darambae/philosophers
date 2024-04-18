@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:41:34 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/17 15:44:11 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:16:26 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define FORK 3
 # define DEAD 4
 
-struct s_philo;
+struct	s_philo;
 
 typedef struct s_param
 {
@@ -38,8 +38,8 @@ typedef struct s_param
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
-	
-	t_philo			*philo;
+
+	struct s_philo	*philo;
 	pthread_t		*tids;
 	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
@@ -50,8 +50,9 @@ typedef struct s_philo
 {
 	int				id;
 	int				state;
-	uint64_t		time_last_meal;
 	int				num_eat;
+	uint64_t		time_last_meal;
+	uint64_t		time_limit_to_death;
 	pthread_t		thread;
 
 	pthread_mutex_t	lock;
@@ -61,7 +62,7 @@ typedef struct s_philo
 }					t_philo;
 
 int			is_digit(char **args);
-int			is_positive(char *str);
+int			is_positive(char **str);
 long		ft_atoi(char *str);
 void		ft_usleep(uint64_t elapsed);
 void		err_msg(char *msg);
@@ -70,10 +71,11 @@ uint64_t	get_time(void);
 int			init_param(t_param *param, char **args);
 int			init_philo(t_param *param);
 int			life_cycle(t_param *param);
-void		*take_forks(t_philo *philo);
-void		*put_down_forks(t_philo *philo);
-void		*eat(void *arg);
-void		*dead_stop(void *param);
+void		take_forks(t_philo *philo);
+void		put_down_forks(t_philo *philo);
+void		eat_sleep_think(t_philo *philo);
+void		*is_everyone_full(void *param);
 void		print(t_philo *philo, char *str);
+void		change_state(t_philo *philo, int state);
 
 #endif

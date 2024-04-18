@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 08:57:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/17 14:58:46 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:15:43 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ void	ft_usleep(uint64_t elapsed)
 	start = get_time();
 	while (get_time() < start + elapsed)
 		usleep(100);
-}
-
-void	err_msg(char *msg)
-{
-	errno = 1;
-	printf("%s\n", msg);
-	exit(1);
 }
 
 /*Checking the arguements are all digits including sign*/
@@ -86,7 +79,7 @@ long	ft_atoi(char *str)
 }
 
 /*Checking the arguements are all positive numbers*/
-int	is_positive(char *str)
+int	is_positive(char **str)
 {
 	int	i;
 

@@ -6,13 +6,14 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/17 15:50:51 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:14:09 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static int	allocate_param(t_param *param)
+/*allocating memory for forks, philosophers and thread in parameters*/
+static void	allocate_param(t_param *param)
 {
 	int	i;
 
@@ -37,7 +38,7 @@ int	init_param(t_param *param, char **args)
 	{
 		pthread_mutex_init(&param->print, NULL);
 		pthread_mutex_init(&param->lock, NULL);
-		param->stop	= 0;
+		param->stop = 0;
 		param->num_full = 0;
 		param->num_philo = (int) ft_atoi(args[0]);
 		param->time_to_die = (uint64_t) ft_atoi(args[1]);
@@ -55,7 +56,7 @@ int	init_param(t_param *param, char **args)
 	return (0);
 }
 
-/*Initializing philosophers and starting the life cycle*/
+/*Initializing philosophers*/
 int	init_philo(t_param *param)
 {
 	int			i;
@@ -65,22 +66,17 @@ int	init_philo(t_param *param)
 	{
 		param->philo[i].id = i;
 		param->philo[i].param = param;
+		param->philo[i].num_eat = 0;
+		param->philo[i].state = -1;
+		param->philo[i].time_last_meal = 0;
+		param->philo[i].time_limit_to_death = param->time_to_die;
+		param->philo[i].thread = param->tids[i];
 		param->philo[i].left_fork = &param->forks[i];
 		if (i != 0)
 			param->philo[i].right_fork = &param->forks[i - 1];
 		else
 			param->philo[0].right_fork = &param->forks[param->num_philo - i];
-		param->philo[i].num_eat = 0;
-		param->philo[i].state = -1;
-		param->philo[i].time_last_meal = 0;
-		param->philo[i].thread = param->tids[i];
 		pthread_mutex_init(&(param->philo[i].lock), NULL);
-	}
-	i = -1;
-    while (++i < param->num_philo)
-    {
-		if (pthread_join(param->tids[i], NULL) != 0)
-			return (-1);
 	}
 	return (0);
 }

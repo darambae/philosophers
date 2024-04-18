@@ -6,51 +6,52 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 13:48:17 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/17 15:50:34 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:13:38 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
+void	change_state(t_philo *philo, int state)
+{
+	pthread_mutex_lock(&philo->lock);
+	philo->state = state;
+	if (state == DEAD)
+		philo->param->stop = 1;
+	else if (state == EAT)
+	{
+		philo->time_last_meal = get_time();
+		philo->time_limit_to_death = philo->time_last_meal \
+			+ philo->param->time_to_die;
+	}
+	pthread_mutex_unlock(&philo->lock);
+}
+
 void	print(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->param->print);
-	printf("%lu %d %s\n", get_time(), philo->id, str);
+	printf("%llu %d %s\n", get_time(), philo->id, str);
 	pthread_mutex_unlock(&philo->param->print);
 }
 
+/*By taking forks, start to eat*/
 void	take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
-    print(philo, " has taken a fork\n");
-    philo->state = EAT;
-    ft_usleep(philo->param->time_to_eat);
+	print(philo, " has taken a fork\n");
 }
 
+/*by putting down forks, stop eating*/
 void	put_down_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-    philo->num_eat++;
-    if (philo->num_eat == philo->param->num_must_eat)
-    {
+	pthread_mutex_lock(&philo->lock);
+	philo->num_eat++;
+	if (philo->num_eat == philo->param->num_must_eat)
 		philo->param->num_full++;
-    }
-    philo->time_last_meal = get_time();
+	philo->time_last_meal = get_time();
+	pthread_mutex_unlock(&philo->lock);
 }
 
-void	*eat(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	take_forks(philo);
-    print(philo, " is eating\n");
-    put_down_forks(philo);
-    philo->state = SLEEP;
-    print(philo, " is sleeping\n");
-    ft_usleep(philo->param->time_to_sleep);
-    philo->state = THINK;
-    print(philo, " is thinking\n");
-}
