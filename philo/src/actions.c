@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 13:48:17 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 11:13:38 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 10:29:47 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	change_state(t_philo *philo, int state)
 void	print(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->param->print);
-	printf("%llu %d %s\n", get_time(), philo->id, str);
+	printf("%lu %d %s\n", get_time(), philo->id, str);
 	pthread_mutex_unlock(&philo->param->print);
 }
 

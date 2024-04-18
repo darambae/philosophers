@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 11:14:09 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 10:30:45 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	init_param(t_param *param, char **args)
 		param->time_to_die = (uint64_t) ft_atoi(args[1]);
 		param->time_to_eat = (uint64_t) ft_atoi(args[2]);
 		param->time_to_sleep = (uint64_t) ft_atoi(args[3]);
-		if (args[4] && args[4] > 0)
+		if (args[4] && ft_atoi(args[4]) > 0)
 			param->num_must_eat = (int) ft_atoi(args[4]);
 		else
 			param->num_must_eat = -1;
