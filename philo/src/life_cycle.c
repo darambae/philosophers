@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 13:02:53 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:55:49 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,33 @@ void	*anyone_dead(void *philo)
 	t_philo	*phi;
 
 	phi = (t_philo *)philo;
-	while (phi->param->stop == 0 && phi->state != DEAD)
-	{
-		if (get_time() >= phi->time_limit_to_death)
-		{
-			pthread_mutex_lock(&phi->param->lock);
-			change_state(phi, DEAD);
-			print(phi, " died");
-			pthread_mutex_unlock(&phi->param->lock);
-		}
-	}
+	while (1)
+    {
+        pthread_mutex_lock(&phi->lock);
+        if (phi->param->stop || phi->state == DEAD)
+        {
+            pthread_mutex_unlock(&phi->lock);
+            break;
+        }
+        if (get_time() >= phi->time_limit_to_death && phi->state != EAT)
+        {
+            change_state(phi, DEAD);
+            print(phi, " died");
+        }
+        pthread_mutex_unlock(&phi->lock);
+        ft_usleep(1000); // avoid busy-waiting
+    }
+	// while (phi->param->stop == 0 && phi->state != DEAD)
+	// {
+	// 	pthread_mutex_lock(&phi->param->lock);
+	// 	if (get_time() >= phi->time_limit_to_death)
+	// 	{
+	// 		change_state(phi, DEAD);
+	// 		print(phi, " died");
+	// 	}
+	// 	pthread_mutex_unlock(&phi->param->lock);
+	// 	ft_usleep(1000);
+	// }
 	return ((void *)0);
 }
 
@@ -59,8 +76,6 @@ void	*life_start(void *philo)
 	return ((void *)0);
 }
 
-
-
 void	*is_everyone_full(void *param)
 {
 	t_param	*data;
@@ -68,16 +83,17 @@ void	*is_everyone_full(void *param)
 	data = (t_param *)param;
 	while (data->stop == 0)
 	{
+		pthread_mutex_lock(&data->lock);
 		if (data->num_full >= data->num_philo)
 		{
-			pthread_mutex_lock(&data->lock);
 			pthread_mutex_lock(&data->print);
 			data->stop = 1;
 			printf("Everyone has eaten as many times as %d\n",
 				data->num_must_eat);
 			pthread_mutex_unlock(&data->print);
-			pthread_mutex_unlock(&data->lock);
 		}
+		pthread_mutex_unlock(&data->lock);
+		ft_usleep(1000);
 	}
 	return ((void *)0);
 }
