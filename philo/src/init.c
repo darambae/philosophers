@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 10:30:45 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 14:10:18 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static void	allocate_param(t_param *param)
 	i = -1;
 	param->tids = malloc(sizeof(pthread_t) * param->num_philo);
 	if (!param->tids)
-		err_msg("failed to malloc.\n");
+		cleanup(param);
 	param->forks = malloc(sizeof(pthread_mutex_t) * param->num_philo);
 	if (!param->forks)
-		err_msg("failed to malloc.\n");
+		cleanup(param);
 	param->philo = malloc(sizeof(t_philo) * param->num_philo);
 	if (!param->philo)
-		err_msg("failed to malloc.\n");
+		cleanup(param);
 	while (++i < param->num_philo)
 		pthread_mutex_init(&param->forks[i], NULL);
 }
@@ -52,7 +52,7 @@ int	init_param(t_param *param, char **args)
 		return (0);
 	}
 	else
-		err_msg("Invalid arguments. Please double-check.\n");
+		ft_exit(param);
 	return (0);
 }
 
@@ -69,14 +69,20 @@ int	init_philo(t_param *param)
 		param->philo[i].num_eat = 0;
 		param->philo[i].state = -1;
 		param->philo[i].time_last_meal = 0;
-		param->philo[i].time_limit_to_death = param->time_to_die;
-		param->philo[i].thread = param->tids[i];
+		param->philo[i].time_limit_to_death = get_time() + param->time_to_die;
 		param->philo[i].left_fork = &param->forks[i];
-		if (i != 0)
-			param->philo[i].right_fork = &param->forks[i - 1];
+		if (param->num_philo == 1)
+		{
+			param->philo[0].right_fork = NULL;
+		}
 		else
-			param->philo[0].right_fork = &param->forks[param->num_philo - i];
-		pthread_mutex_init(&(param->philo[i].lock), NULL);
+		{
+			if (i != 0)
+				param->philo[i].right_fork = &param->forks[i - 1];
+			else
+				param->philo[i].right_fork = &param->forks[param->num_philo - 1];
+		} 
+		pthread_mutex_init(&param->philo[i].lock, NULL);
 	}
 	return (0);
 }
