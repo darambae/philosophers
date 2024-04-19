@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 15:31:00 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 15:54:06 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,22 +104,22 @@ int	life_cycle(t_param *param)
 	int			i;
 
 	if (pthread_create(&thread, NULL, &is_everyone_full, param) != 0)
-		ft_exit(param);
+		return (1);
 	i = -1;
 	while (++i < param->num_philo)
 	{
 		if (pthread_create(&param->tids[i], NULL, &life_start,
 				&param->philo[i]) != 0)
-			ft_exit(param);
+			return (1);
 		ft_usleep(1);
 	}
 	i = -1;
 	while (++i < param->num_philo)
 	{
 		if (pthread_join(param->tids[i], NULL) == 0)
-			return (-1);
+			return (1);
 	}
 	if (pthread_join(thread, NULL) == 0)
-		return (-1);
+		return (1);
 	return (0);
 }

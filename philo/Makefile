@@ -2,7 +2,7 @@ NAME= philo
 SRC= $(wildcard src/*.c)
 OBJ= $(SRC:.c=.o)
 CFLAGS= -Wall -Wextra -Werror
-CC= gcc -g -pthread
+CC= gcc -g -lpthread
 
 all: $(NAME)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)

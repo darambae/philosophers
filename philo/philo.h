@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:41:34 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 14:17:13 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 16:13:55 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void		ft_exit(t_param *param);
 void		cleanup(t_param *param);
 uint64_t	get_time(void);
 
-int			init_param(t_param *param, char **args);
+void		init_param(t_param *param, char **args);
 int			init_philo(t_param *param);
 int			life_cycle(t_param *param);
 void		*life_start(void *philo);

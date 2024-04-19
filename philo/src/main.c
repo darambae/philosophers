@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 14:22:30 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 16:06:34 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	ft_exit(t_param *param)
 	int	i;
 
 	i = -1;
+	if (param->forks)
 	while (++i < param->num_philo)
 	{
 		pthread_mutex_destroy(&param->forks[i]);
@@ -44,6 +45,7 @@ void	only_one_philo(t_param *param)
 	pthread_detach(param->tids[0]);
 	while (param->stop == 0)
 		ft_usleep(0);
+	ft_exit(param);
 }
 
 int	main(int ac, char **av)
@@ -52,7 +54,7 @@ int	main(int ac, char **av)
 
 	param = malloc(sizeof(t_param));
 	if (!param)
-		return (1);
+		free(param);
 	if (ac == 5 || ac == 6)
 	{
 		init_param(param, av + 1);
@@ -60,7 +62,10 @@ int	main(int ac, char **av)
 		if (param->num_philo == 1)
 			only_one_philo(param);
 		else
-			life_cycle(param);
+		{
+			if (life_cycle(param) == 1)
+				ft_exit(param);
+		}
 		ft_exit(param);
 	}
 	else

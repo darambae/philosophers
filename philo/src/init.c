@@ -6,33 +6,37 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 14:56:05 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 16:11:44 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
 /*allocating memory for forks, philosophers and thread in parameters*/
-static void	allocate_param(t_param *param)
+static int	allocate_param(t_param *param)
 {
 	int	i;
 
 	i = -1;
 	param->tids = malloc(sizeof(pthread_t) * param->num_philo);
 	if (!param->tids)
-		cleanup(param);
+		return (1);
 	param->forks = malloc(sizeof(pthread_mutex_t) * param->num_philo);
 	if (!param->forks)
-		cleanup(param);
+		return (1);
 	param->philo = malloc(sizeof(t_philo) * param->num_philo);
 	if (!param->philo)
-		cleanup(param);
+		return (1);
 	while (++i < param->num_philo)
+	{
+		pthread_mutex_init(&param->philo[i].lock, NULL);
 		pthread_mutex_init(&param->forks[i], NULL);
+	}
+	return (0);
 }
 
 /*Initializing the parameters*/
-int	init_param(t_param *param, char **args)
+void	init_param(t_param *param, char **args)
 {
 	if (is_digit(args) && is_positive(args))
 	{
@@ -48,12 +52,11 @@ int	init_param(t_param *param, char **args)
 			param->num_must_eat = (int) ft_atoi(args[4]);
 		else
 			param->num_must_eat = -1;
-		allocate_param(param);
-		return (0);
+		if (allocate_param(param) == 1)
+			ft_exit(param);
 	}
 	else
 		ft_exit(param);
-	return (0);
 }
 
 /*Initializing philosophers*/
@@ -80,7 +83,6 @@ int	init_philo(t_param *param)
 			else
 				param->philo[i].right_fork = &param->forks[param->num_philo - 1];
 		} 
-		pthread_mutex_init(&param->philo[i].lock, NULL);
 	}
 	return (0);
 }
