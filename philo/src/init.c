@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 14:10:18 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 14:56:05 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ int	init_philo(t_param *param)
 		param->philo[i].time_limit_to_death = get_time() + param->time_to_die;
 		param->philo[i].left_fork = &param->forks[i];
 		if (param->num_philo == 1)
-		{
 			param->philo[0].right_fork = NULL;
-		}
 		else
 		{
 			if (i != 0)

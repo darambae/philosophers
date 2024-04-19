@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 14:38:31 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 15:31:00 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,25 @@ void	*anyone_dead(void *philo)
 
 	phi = (t_philo *)philo;
 	while (1)
-    {
-        pthread_mutex_lock(&phi->lock);
-        if (phi->param->stop || phi->state == DEAD)
-        {
-            pthread_mutex_unlock(&phi->lock);
-            break;
-        }
+	{
+		pthread_mutex_lock(&phi->lock);
+		if (phi->param->stop || phi->state == DEAD)
+		{
+			pthread_mutex_unlock(&phi->lock);
+			break;
+		}
 		current_time = get_time();
-        if (current_time >= phi->time_limit_to_death && phi->state != EAT)
-        {
+		if (current_time >= phi->time_limit_to_death && phi->state != EAT)
+		{
 			print(phi, " died");
-            phi->state = DEAD;
+			phi->state = DEAD;
 			phi->param->stop = 1;
 			pthread_mutex_unlock(&phi->lock);
 			break;
-        }
-        pthread_mutex_unlock(&phi->lock);
-        ft_usleep(1000); // avoid busy-waiting
-    }
+		}
+		pthread_mutex_unlock(&phi->lock);
+		ft_usleep(1000);
+	}
 	return ((void *)0);
 }
 
@@ -73,28 +73,29 @@ void	*life_start(void *philo)
 	return ((void *)0);
 }
 
-void *is_everyone_full(void *param)
+void	*is_everyone_full(void *param)
 {
-    t_param *data = (t_param *)param;
+	t_param	*data;
 
-    pthread_mutex_lock(&data->lock); // Lock before entering the loop
-    while (data->stop == 0 && data->num_full < data->num_philo) // Check if stop condition or all philosophers are full
-    {
-        pthread_mutex_unlock(&data->lock); // Unlock before sleeping
-        ft_usleep(1000); // Sleep to avoid busy-waiting
-        pthread_mutex_lock(&data->lock); // Lock again before checking the condition
-    }
+	data = (t_param *)param;
+	pthread_mutex_lock(&data->lock);
+	while (data->stop == 0 && data->num_full < data->num_philo)
+	{
+		pthread_mutex_unlock(&data->lock);
+		ft_usleep(1000);
+		pthread_mutex_lock(&data->lock);
+	}
 
-    if (data->stop == 0 && data->num_full >= data->num_philo) // Check if everyone is full
-    {
-        pthread_mutex_lock(&data->print); // Lock before printing
-        printf("Everyone has eaten as many times as %d\n", data->num_must_eat);
-        pthread_mutex_unlock(&data->print); // Unlock after printing
-		data->stop = 1; // Set stop flag
-		pthread_mutex_unlock(&data->lock); // Unlock before returning
-    }
-    pthread_mutex_unlock(&data->lock); // Unlock before returning
-    return NULL;
+	if (data->stop == 0 && data->num_full >= data->num_philo)
+	{
+		pthread_mutex_lock(&data->print);
+		printf("Everyone has eaten as many times as %d\n", data->num_must_eat);
+		pthread_mutex_unlock(&data->print);
+		data->stop = 1;
+		pthread_mutex_unlock(&data->lock);
+	}
+	pthread_mutex_unlock(&data->lock);
+	return (NULL);
 }
 
 int	life_cycle(t_param *param)
