@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 13:48:17 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 15:29:59 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 14:55:41 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_fork);
 	pthread_mutex_lock(philo->left_fork);
-	print(philo, " has taken a fork");
+	print(philo, " has taken both forks");
 }
 
 /*by putting down forks, stop eating*/

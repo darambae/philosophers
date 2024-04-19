@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:41:34 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/18 11:16:26 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/19 14:17:13 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # define EAT 0
 # define SLEEP 1
 # define THINK 2
-# define FORK 3
 # define DEAD 4
 
 struct	s_philo;
@@ -65,16 +64,19 @@ int			is_digit(char **args);
 int			is_positive(char **str);
 long		ft_atoi(char *str);
 void		ft_usleep(uint64_t elapsed);
-void		err_msg(char *msg);
+void		ft_exit(t_param *param);
+void		cleanup(t_param *param);
 uint64_t	get_time(void);
 
 int			init_param(t_param *param, char **args);
 int			init_philo(t_param *param);
 int			life_cycle(t_param *param);
+void		*life_start(void *philo);
 void		take_forks(t_philo *philo);
 void		put_down_forks(t_philo *philo);
-void		eat_sleep_think(t_philo *philo);
+int			eat_sleep_think(t_philo *philo);
 void		*is_everyone_full(void *param);
+void		*anyone_dead(void *philo);
 void		print(t_philo *philo, char *str);
 void		change_state(t_philo *philo, int state);
 
