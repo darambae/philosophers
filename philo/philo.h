@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:41:34 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 08:53:52 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 15:48:34 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define EAT 0
 # define SLEEP 1
 # define THINK 2
+# define FULL 3
 # define DEAD 4
 
 struct	s_philo;
@@ -64,7 +65,7 @@ int			is_digit(char **args);
 int			is_positive(char **str);
 long		ft_atoi(char *str);
 void		ft_usleep(uint64_t elapsed);
-void		ft_exit(t_param *param);
+void		ft_exit(t_param *param, int err, char *msg);
 void		cleanup(t_param *param);
 uint64_t	get_time(void);
 

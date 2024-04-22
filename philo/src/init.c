@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 16:11:44 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 14:00:38 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,14 @@ void	init_param(t_param *param, char **args)
 		else
 			param->num_must_eat = -1;
 		if (allocate_param(param) == 1)
-			ft_exit(param);
+			ft_exit(param, 1, "Failed allocation of parameters");
 	}
 	else
-		ft_exit(param);
+	{
+		free(param);
+		printf("ERROR : Double check arguments\n");
+		exit(1);
+	}
 }
 
 /*Initializing philosophers*/

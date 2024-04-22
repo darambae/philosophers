@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 13:42:32 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 16:18:31 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	cleanup(t_param *param)
 	free(param);
 }
 
-void	ft_exit(t_param *param)
+void	ft_exit(t_param *param, int err, char *msg)
 {
 	int	i;
 
@@ -38,15 +38,23 @@ void	ft_exit(t_param *param)
 	pthread_mutex_destroy(&param->print);
 	pthread_mutex_destroy(&param->lock);
 	cleanup(param);
+	if (err)
+	{
+		printf("%s\n", msg);	
+		exit(1);
+	}
+	else
+		exit(0);
+	
 }
 
 void	only_one_philo(t_param *param)
 {
 	pthread_create(&param->tids[0], NULL, &anyone_dead, &param->philo[0]);
-	pthread_detach(param->tids[0]);
+	pthread_join(param->tids[0], NULL);
 	while (param->stop == 0)
 		ft_usleep(0);
-	ft_exit(param);
+	ft_exit(param, 0, NULL);
 }
 
 int	main(int ac, char **av)
@@ -63,9 +71,9 @@ int	main(int ac, char **av)
 		else
 		{
 			if (life_cycle(param) == 1)
-				ft_exit(param);
+				ft_exit(param, 1, "Life cycle stopped");
 			if (param != NULL)
-				cleanup(param);
+				ft_exit(param, 0, NULL);
 		}
 	}
 	else
