@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:42:55 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 14:00:38 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 16:35:58 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ int	init_philo(t_param *param)
 			if (i != 0)
 				param->philo[i].right_fork = &param->forks[i - 1];
 			else
-				param->philo[i].right_fork = &param->forks[param->num_philo - 1];
-		} 
+				param->philo[i].right_fork = &param->forks[
+					param->num_philo - 1];
+		}
 	}
 	return (0);
 }

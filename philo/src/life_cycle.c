@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 16:03:39 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 16:36:22 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	life_cycle(t_param *param)
 {
 	pthread_t	thread;
 	int			i;
-	
+
 	if (param->num_must_eat > 0)
 	{
 		if (pthread_create(&thread, NULL, &is_everyone_full, param) != 0)
