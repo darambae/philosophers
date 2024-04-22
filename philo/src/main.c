@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/19 16:06:34 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 09:10:49 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	cleanup(t_param *param)
 {
 	if (param->tids)
 		free(param->tids);
-	if (param->tids)
+	if (param->forks)
 		free(param->forks);
-	if (param->tids)
+	if (param->philo)
 		free(param->philo);
 	free(param);
 }
@@ -28,7 +28,8 @@ void	ft_exit(t_param *param)
 	int	i;
 
 	i = -1;
-	if (param->forks)
+	if (!param)
+		return ;
 	while (++i < param->num_philo)
 	{
 		pthread_mutex_destroy(&param->forks[i]);
@@ -53,8 +54,6 @@ int	main(int ac, char **av)
 	t_param	*param;
 
 	param = malloc(sizeof(t_param));
-	if (!param)
-		free(param);
 	if (ac == 5 || ac == 6)
 	{
 		init_param(param, av + 1);
@@ -66,7 +65,8 @@ int	main(int ac, char **av)
 			if (life_cycle(param) == 1)
 				ft_exit(param);
 		}
-		ft_exit(param);
+		if (param)
+			cleanup(param);
 	}
 	else
 	{
