@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 16:26:05 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 16:27:03 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 17:58:15 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,19 @@ void	*anyone_dead(void *philo)
 	while (1)
 	{
 		pthread_mutex_lock(&phi->lock);
-		if (phi->param->stop || phi->state == DEAD)
-		{
-			pthread_mutex_unlock(&phi->lock);
-			break ;
-		}
 		current_time = get_time();
 		if (current_time >= phi->time_limit_to_death && phi->state != EAT)
 		{
+            phi->state = DEAD;
+            pthread_mutex_unlock(&phi->lock);
+            pthread_mutex_lock(&phi->param->lock);
+            phi->param->stop = 1;
+            pthread_mutex_unlock(&phi->param->lock);
 			print(phi, " died");
-			phi->state = DEAD;
-			phi->param->stop = 1;
+			break ;
+		}
+        if (phi->param->stop || phi->state == DEAD)
+		{
 			pthread_mutex_unlock(&phi->lock);
 			break ;
 		}

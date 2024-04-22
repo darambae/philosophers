@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 16:28:29 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 16:47:24 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,11 @@ void	ft_exit(t_param *param, int err, char *msg)
 	cleanup(param);
 	if (err)
 	{
-		printf("%s\n", msg);	
+		printf("%s\n", msg);
 		exit(1);
 	}
 	else
 		exit(0);
-	
 }
 
 static void	only_one_philo(t_param *param)

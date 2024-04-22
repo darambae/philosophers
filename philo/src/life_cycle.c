@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 16:40:53 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 17:13:36 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 static int	eat_phase(t_philo *philo)
 {
-	if (philo->param->num_philo == 1)
-		return (1);
 	take_forks(philo);
 	change_state(philo, EAT);
 	print(philo, " is eating");
@@ -46,8 +44,7 @@ void	*life_start(void *philo)
 		return ((void *)1);
 	while (phi->param->stop == 0 && phi->state != DEAD && phi->state != FULL)
 	{
-		if (eat_phase(phi) == 1)
-			break ;
+		eat_phase(phi);
 		if (phi->state == DEAD || phi->param->stop == 1 || phi->state == FULL)
 			break ;
 		sleep_phase(phi);
@@ -64,12 +61,9 @@ int	life_cycle(t_param *param)
 {
 	pthread_t	thread;
 	int			i;
-	
+
 	if (param->num_must_eat > 0)
-	{
-		if (pthread_create(&thread, NULL, &is_everyone_full, param) != 0)
-			return (1);
-	}
+		pthread_create(&thread, NULL, &is_everyone_full, param);
 	i = -1;
 	while (++i < param->num_philo)
 	{
@@ -85,9 +79,6 @@ int	life_cycle(t_param *param)
 			return (1);
 	}
 	if (param->num_must_eat > 0)
-	{
-		if (pthread_join(thread, NULL))
-			return (1);
-	}
+		pthread_join(thread, NULL);
 	return (0);
 }

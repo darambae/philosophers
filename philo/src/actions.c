@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 13:48:17 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 16:23:23 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 17:55:14 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ void	change_state(t_philo *philo, int state)
 {
 	pthread_mutex_lock(&philo->lock);
 	if (state == DEAD)
+	{
+		pthread_mutex_lock(&philo->param->lock);
 		philo->param->stop = 1;
+		pthread_mutex_unlock(&philo->param->lock);
+	}
 	else if (state == EAT)
 	{
 		philo->time_last_meal = get_time();
