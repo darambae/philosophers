@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:25:19 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 16:03:39 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 16:40:53 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,36 +36,6 @@ static void	think_phase(t_philo *philo)
 	print(philo, " is thinking");
 }
 
-/*check if any philopher died*/
-void	*anyone_dead(void *philo)
-{
-	t_philo		*phi;
-	uint64_t	current_time;
-
-	phi = (t_philo *)philo;
-	while (1)
-	{
-		pthread_mutex_lock(&phi->lock);
-		if (phi->param->stop || phi->state == DEAD)
-		{
-			pthread_mutex_unlock(&phi->lock);
-			break ;
-		}
-		current_time = get_time();
-		if (current_time >= phi->time_limit_to_death && phi->state != EAT)
-		{
-			print(phi, " died");
-			phi->state = DEAD;
-			phi->param->stop = 1;
-			pthread_mutex_unlock(&phi->lock);
-			break ;
-		}
-		pthread_mutex_unlock(&phi->lock);
-		ft_usleep(1000);
-	}
-	return ((void *)0);
-}
-
 void	*life_start(void *philo)
 {
 	t_philo	*phi;
@@ -88,30 +58,6 @@ void	*life_start(void *philo)
 	if (pthread_join(phi->thread, NULL) != 0)
 		return ((void *)1);
 	return ((void *)0);
-}
-
-void	*is_everyone_full(void *param)
-{
-	t_param	*data;
-
-	data = (t_param *)param;
-	pthread_mutex_lock(&data->lock);
-	while (data->stop == 0 && data->num_full < data->num_philo)
-	{
-		pthread_mutex_unlock(&data->lock);
-		ft_usleep(1000);
-		pthread_mutex_lock(&data->lock);
-	}
-	if (data->stop == 0 && data->num_full >= data->num_philo)
-	{
-		pthread_mutex_lock(&data->print);
-		printf("Everyone has eaten as many times as %d\n", data->num_must_eat);
-		data->stop = 1;
-		pthread_mutex_unlock(&data->print);
-		pthread_mutex_unlock(&data->lock);
-	}
-	pthread_mutex_unlock(&data->lock);
-	return (NULL);
 }
 
 int	life_cycle(t_param *param)

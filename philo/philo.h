@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:41:34 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 15:48:34 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 16:28:38 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int			life_cycle(t_param *param);
 void		*life_start(void *philo);
 void		take_forks(t_philo *philo);
 void		put_down_forks(t_philo *philo);
-int			eat_sleep_think(t_philo *philo);
 void		*is_everyone_full(void *param);
 void		*anyone_dead(void *philo);
 void		print(t_philo *philo, char *str);

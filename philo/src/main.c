@@ -6,11 +6,18 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 16:18:31 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 16:28:29 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
+
+void	print(t_philo *philo, char *str)
+{
+	pthread_mutex_lock(&philo->param->print);
+	printf("At %lu, Philosopher no.%d %s.\n", get_time(), philo->id, str);
+	pthread_mutex_unlock(&philo->param->print);
+}
 
 void	cleanup(t_param *param)
 {
@@ -48,7 +55,7 @@ void	ft_exit(t_param *param, int err, char *msg)
 	
 }
 
-void	only_one_philo(t_param *param)
+static void	only_one_philo(t_param *param)
 {
 	pthread_create(&param->tids[0], NULL, &anyone_dead, &param->philo[0]);
 	pthread_join(param->tids[0], NULL);
