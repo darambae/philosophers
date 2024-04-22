@@ -6,7 +6,7 @@
 /*   By: dabae <dabae@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 10:42:53 by dabae             #+#    #+#             */
-/*   Updated: 2024/04/22 09:10:49 by dabae            ###   ########.fr       */
+/*   Updated: 2024/04/22 13:42:32 by dabae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ int	main(int ac, char **av)
 		{
 			if (life_cycle(param) == 1)
 				ft_exit(param);
+			if (param != NULL)
+				cleanup(param);
 		}
-		if (param)
-			cleanup(param);
 	}
 	else
 	{
